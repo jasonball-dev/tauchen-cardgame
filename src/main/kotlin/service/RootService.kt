@@ -1,5 +1,7 @@
 package service
 
+import entity.Player
+import entity.TauchenGame
 import javax.security.auth.Refreshable
 
 /**
@@ -11,7 +13,10 @@ import javax.security.auth.Refreshable
 class RootService {
     val gameService = GameService(this)
     val playerActionService = PlayerActionService(this)
+    val cardService = CardService(this)
+
     var currentGame : TauchenGame? = null
+    var currentPlayer : Player? = null
 
 
     /**
@@ -21,6 +26,7 @@ class RootService {
     fun addRefreshable(newRefreshable : Refreshable) {
         gameService.addRefreshable(newRefreshable)
         playerActionService.addRefreshable(newRefreshable)
+        cardService.addRefreshable(newRefreshable)
     }
 
     /**

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
 /**
- * TestClass for Player
+ * TestClass for Player.
  */
 
 class PlayerTest {

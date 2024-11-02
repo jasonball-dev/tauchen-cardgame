@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 /**
- * TestClass for TauchenGame
+ * TestClass for TauchenGame.
  */
 
 class TauchenGameTest {
