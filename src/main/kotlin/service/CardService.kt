@@ -8,32 +8,34 @@ import entity.CardValue
  * Service layer class that provides the logic for dealing cards and creating decks.
  */
 
-class CardService(private val rootService: RootService): AbstractRefreshingService() {
+class CardService(private val rootService: RootService) : AbstractRefreshingService() {
     /**
      * Deals the cards to the players hands at the start of the game.
      *
      * @throws IllegalArgumentException if game and/or player are null
      */
-    fun dealCards() {
-        val game = rootService.currentGame
-        requireNotNull(game)
+    companion object {
+        fun dealCards() {
+            val game = RootService().currentGame
+            requireNotNull(game)
 
-        val playerOne = game.players.first()
-        requireNotNull(playerOne)
-        val playerTwo = game.players.last()
-        requireNotNull(playerTwo)
+            val playerOne = game.players.first()
+            requireNotNull(playerOne)
+            val playerTwo = game.players.last()
+            requireNotNull(playerTwo)
 
-        for (i in 1..5)
-        playerOne.hand.add(game.drawStack.first())
-        game.drawStack.removeFirst()
-        playerTwo.hand.add(game.drawStack.first())
-        game.drawStack.removeFirst()
+            for (i in 1..5)
+                playerOne.hand.add(game.drawStack.first())
+            game.drawStack.removeFirst()
+            playerTwo.hand.add(game.drawStack.first())
+            game.drawStack.removeFirst()
+        }
     }
 
     /**
      * Creates the games drawStack.
      */
-    fun createDrawStack() : List<Card> {
+    fun createDrawStack(): List<Card> {
         val unshuffledCards: List<Card> = List<Card>(52) { index ->
             Card(
                 CardSuit.values()[index / 13],
