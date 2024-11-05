@@ -39,12 +39,12 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun drawCard() {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) {"Game is null."}
 
         val player = rootService.currentPlayer
-        requireNotNull(player)
+        requireNotNull(player) {"Player is null."}
 
-        require (game.drawStack.size > 0)
+        require (game.drawStack.size > 0) {"DrawStack is empty."}
         player.hand.add(game.drawStack.first())
         game.drawStack.removeFirst()
 
@@ -71,7 +71,9 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         require (player.hand.size > 0)
         require (game.playStack.size < 3)
         game.playStack.add(card)
+        game.playStack.remove(replacement)
         player.hand.add(replacement)
+        player.hand.remove(card)
 
         //onAllRefreshables { Refreshable.refreshAfterSwapCard() }
     }

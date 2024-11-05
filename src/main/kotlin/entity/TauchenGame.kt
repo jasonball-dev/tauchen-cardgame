@@ -13,7 +13,7 @@ class TauchenGame(
     val players: Array<Player>,
     var isPlayerOneActive: Boolean = true,
 ) {
-    val drawStack: MutableList<Card> = mutableListOf<Card>()
+    var drawStack: MutableList<Card> = mutableListOf<Card>()
     val playStack: MutableList<Card> = mutableListOf<Card>()
     val discardStack: MutableList<Card> = mutableListOf<Card>()
 

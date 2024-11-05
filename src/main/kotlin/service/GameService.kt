@@ -14,25 +14,34 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         var playerOne = Player(playerNames[0])
         var playerTwo = Player(playerNames[1])
 
-        val game = TauchenGame(arrayOf(playerOne, playerTwo))
+        rootService.currentGame = TauchenGame(players = arrayOf(playerOne, playerTwo))
+        val game = rootService.currentGame
 
-        CardService.dealCards()
-
-        val startingPlayer = selectStartingPlayer(arrayOf(playerOne, playerTwo))
+        rootService.currentPlayer = selectStartingPlayer(arrayOf(playerOne, playerTwo))
 
         // If player at position 0 in players is the startingPlayer, then he is already the current player.
-        if (game.players[1] == startingPlayer) {
-            game.isPlayerOneActive = false
+        if (game != null && game.players[1] == rootService.currentPlayer) {
+            rootService.currentGame!!.isPlayerOneActive = false
         }
+
+        rootService.currentGame?.drawStack = CardService(rootService).createDrawStack()
+        CardService(rootService).dealCards(rootService)
 
         //onAllRefreshables { Refreshable.refreshAfterStartGame() }
     }
 
     /**
-     * Ends the game.
+     * Ends the game if the games drawStack is empty.
      */
     fun endGame() {
+        val game = rootService.currentGame
+        requireNotNull(game)
+
+        require(game.drawStack.size == 0)
+
         //onAllRefreshables { Refreshable.refreshAfterEndGame() }
+        rootService.currentGame = null
+        rootService.currentPlayer = null
     }
 
     /**
@@ -43,18 +52,20 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @throws IllegalArgumentException if game and/or player are null
      */
     fun startTurn(player : Player) {
-        val game = RootService().currentGame
-        requireNotNull(game)
+        val game = rootService.currentGame
+        requireNotNull(game) {"The game is null."}
 
         val playerOne = game.players[0]
-        requireNotNull(playerOne)
+        requireNotNull(playerOne) {"Player one is null."}
         val playerTwo = game.players[1]
-        requireNotNull(playerTwo)
+        requireNotNull(playerTwo) {"Player two is null."}
 
         if (playerOne == player) {
-            game.isPlayerOneActive = true
+            rootService.currentGame?.isPlayerOneActive = true
+            rootService.currentPlayer = rootService.currentGame?.players?.first()
         } else {
-            game.isPlayerOneActive = false
+            rootService.currentGame?.isPlayerOneActive = false
+            rootService.currentPlayer = rootService.currentGame?.players?.last()
         }
 
         //onAllRefreshables { Refreshable.refreshAfterStartTurn() }
@@ -68,7 +79,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @throws IllegalArgumentException if game and/or player are null
      */
     fun endTurn(player : Player) {
-        val game = RootService().currentGame
+        val game = rootService.currentGame
         requireNotNull(game)
 
         val playerOne = game.players[0]
@@ -77,9 +88,11 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         requireNotNull(playerTwo)
 
         if (playerOne == player) {
-            game.isPlayerOneActive = false
+            rootService.currentGame?.isPlayerOneActive = false
+            rootService.currentPlayer = rootService.currentGame?.players?.last()
         } else {
-            game.isPlayerOneActive = true
+            rootService.currentGame?.isPlayerOneActive = true
+            rootService.currentPlayer = rootService.currentGame?.players?.first()
         }
 
         //onAllRefreshables { Refreshable.refreshAfterEndTurn() }
