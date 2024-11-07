@@ -60,6 +60,9 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         game.drawStack.removeFirst()
 
         if (game.drawStack.size == 0) {
+            if (fitsTrio(player.hand.last())) {
+                    playCard(player.hand.last())
+            }
             GameService(rootService).endGame()
         }
         //onAllRefreshables { Refreshable.refreshAfterDrawCard() }
