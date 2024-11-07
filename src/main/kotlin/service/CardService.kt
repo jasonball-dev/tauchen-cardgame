@@ -15,14 +15,14 @@ class CardService(private val rootService: RootService) : AbstractRefreshingServ
      * @throws IllegalArgumentException if game is null.
      */
     fun createDrawStack(): MutableList<Card> {
-        val Cards: MutableList<Card> = mutableListOf()
+        val cards: MutableList<Card> = mutableListOf()
         for (suit in CardSuit.values()) {
             for (value in CardValue.values()) {
-                Cards.add(Card(suit, value))
+                cards.add(Card(suit, value))
             }
         }
-        Cards.shuffled()
-        return Cards
+        cards.shuffled()
+        return cards
     }
 
     /**

@@ -64,8 +64,10 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
                     playCard(player.hand.last())
             }
             GameService(rootService).endGame()
+            //onAllRefreshables { Refreshable.refreshAfterDrawLastCard() }
+        } else {
+            //onAllRefreshables { Refreshable.refreshAfterDrawCard() }
         }
-        //onAllRefreshables { Refreshable.refreshAfterDrawCard() }
     }
 
     /**

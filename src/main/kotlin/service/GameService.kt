@@ -9,7 +9,6 @@ import kotlin.random.Random
  * related to a single player.
  */
 
-
 class GameService(private val rootService: RootService): AbstractRefreshingService() {
     /**
      * Starts a game. This includes dealing the players handcards and choosing the starting player.
@@ -62,9 +61,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         requireNotNull(game) {"The game is null."}
 
         val playerOne = game.players[0]
-        requireNotNull(playerOne) {"Player one is null."}
         val playerTwo = game.players[1]
-        requireNotNull(playerTwo) {"Player two is null."}
 
         if (playerOne == player) {
             rootService.currentGame?.isPlayerOneActive = true
@@ -89,9 +86,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         requireNotNull(game) {"Game is null."}
 
         val playerOne = game.players[0]
-        requireNotNull(playerOne) {"PlayerOne is null."}
         val playerTwo = game.players[1]
-        requireNotNull(playerTwo) {"PlayerTwo is null."}
 
         if (player.hand.size > 8) {
             //discardCard() ???
