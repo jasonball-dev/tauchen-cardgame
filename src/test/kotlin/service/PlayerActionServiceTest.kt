@@ -117,7 +117,7 @@ class PlayerActionServiceTest {
      * Tests if swapCard() works.
      */
     @Test
-    fun testSwapCard() {
+    fun testSwapCardWorks() {
         val game = rootService.currentGame
         requireNotNull(game) { "Game is null." }
         val player = rootService.currentPlayer
@@ -132,6 +132,38 @@ class PlayerActionServiceTest {
         assertEquals(game.playStack.size, 1)
 
         assertEquals(player.hasSpecialAction, false)
+    }
+
+    /**
+     * Tests if swapCard() works when swapped cards fit.
+     */
+    @Test
+    fun testSwapCardTrue() {
+        val game = rootService.currentGame
+        requireNotNull(game) { "Game is null." }
+        val player = rootService.currentPlayer
+        requireNotNull(player) { "Player is null." }
+
+        game.playStack.add(aceOfSpades)
+        game.playStack.add(aceOfSpades)
+
+        assertDoesNotThrow{PlayerActionService(rootService).swapCard(aceOfSpades, game.playStack[0])}
+    }
+
+    /**
+     * Tests if swapCard() doesnt work when swapped cards dont fit.
+     */
+    @Test
+    fun testSwapCardFalse() {
+        val game = rootService.currentGame
+        requireNotNull(game) { "Game is null." }
+        val player = rootService.currentPlayer
+        requireNotNull(player) { "Player is null." }
+
+        game.playStack.add(aceOfSpades)
+        game.playStack.add(aceOfSpades)
+
+        assertFails{PlayerActionService(rootService).swapCard(queenOfHearts, game.playStack[0])}
     }
 
     /**

@@ -88,6 +88,17 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
 
         require(player.hand.size > 0) { "Players hand is empty. SwapCard not possible." }
         require(game.playStack.size < 3) { "PlayStack is >2. SwapCard not possible." }
+
+        if (game.playStack.size == 2) {
+            val testPlayStack: MutableList<Card> = mutableListOf()
+            testPlayStack.add(game.playStack.first())
+            testPlayStack.add(game.playStack.last())
+
+            if (card.value != testPlayStack[0].value && card.suit != testPlayStack[0].suit) {
+                throw IllegalArgumentException("Card to swap doesnt fit.")
+            }
+        }
+
         game.playStack.add(card)
         game.playStack.remove(replacement)
         player.hand.add(replacement)
