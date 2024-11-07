@@ -30,7 +30,7 @@ class CardService(private val rootService: RootService) : AbstractRefreshingServ
      *
      * @throws IllegalArgumentException if game is null.
      */
-    fun dealCards(rootService : RootService) {
+    fun dealCards() {
         for (i in 1..5) {
             rootService.currentGame?.players?.first()?.hand?.add(rootService.currentGame!!.drawStack.first())
             rootService.currentGame?.drawStack?.removeFirst()

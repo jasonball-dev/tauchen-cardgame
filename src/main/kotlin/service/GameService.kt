@@ -4,6 +4,12 @@ import entity.Player
 import entity.TauchenGame
 import kotlin.random.Random
 
+/**
+ * Service layer class that provides the logic for actions not directly
+ * related to a single player.
+ */
+
+
 class GameService(private val rootService: RootService): AbstractRefreshingService() {
     /**
      * Starts a game. This includes dealing the players handcards and choosing the starting player.
@@ -11,8 +17,8 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @param playerNames the names of the two players participating in the game.
      */
     fun startGame(playerNames : List<String>) {
-        var playerOne = Player(playerNames[0])
-        var playerTwo = Player(playerNames[1])
+        val playerOne = Player(playerNames[0])
+        val playerTwo = Player(playerNames[1])
 
         rootService.currentGame = TauchenGame(players = arrayOf(playerOne, playerTwo))
         val game = rootService.currentGame
@@ -25,7 +31,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         }
 
         rootService.currentGame?.drawStack = CardService(rootService).createDrawStack()
-        CardService(rootService).dealCards(rootService)
+        CardService(rootService).dealCards()
 
         //onAllRefreshables { Refreshable.refreshAfterStartGame() }
     }
@@ -35,9 +41,9 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      */
     fun endGame() {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) {"Game is null."}
 
-        require(game.drawStack.size == 0)
+        require(game.drawStack.size == 0) {"DrawStack must empty to end the game."}
 
         //onAllRefreshables { Refreshable.refreshAfterEndGame() }
         rootService.currentGame = null
@@ -80,12 +86,16 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      */
     fun endTurn(player : Player) {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) {"Game is null."}
 
         val playerOne = game.players[0]
-        requireNotNull(playerOne)
+        requireNotNull(playerOne) {"PlayerOne is null."}
         val playerTwo = game.players[1]
-        requireNotNull(playerTwo)
+        requireNotNull(playerTwo) {"PlayerTwo is null."}
+
+        if (player.hand.size > 8) {
+            //discardCard() ???
+        }
 
         if (playerOne == player) {
             rootService.currentGame?.isPlayerOneActive = false
@@ -103,7 +113,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      *
      * @param players the two players participating in Tauchen.
      */
-    fun selectStartingPlayer(players : Array<Player>) : Player {
+    private fun selectStartingPlayer(players : Array<Player>) : Player {
         val randomIndex = Random.nextInt(1)
         return players[randomIndex]
     }

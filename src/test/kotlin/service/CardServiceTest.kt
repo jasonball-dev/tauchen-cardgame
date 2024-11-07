@@ -37,11 +37,10 @@ class CardServiceTest {
         assertEquals(rootService.currentGame?.players?.get(1)?.hand?.size, 5)
         assertEquals(rootService.currentGame?.drawStack?.size, 52)
 
-        CardService(rootService).dealCards(rootService)
+        CardService(rootService).dealCards()
 
         assertEquals(rootService.currentGame?.players?.get(0)?.hand?.size, 10)
         assertEquals(rootService.currentGame?.players?.get(1)?.hand?.size, 10)
         assertEquals(rootService.currentGame?.drawStack?.size, 42)
-
     }
 }

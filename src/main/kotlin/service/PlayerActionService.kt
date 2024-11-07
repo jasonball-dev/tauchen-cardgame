@@ -11,6 +11,9 @@ import view.Refreshable
 class PlayerActionService(private val rootService: RootService) : AbstractRefreshingService() {
     /**
      * Plays a card from the players hand to the games playStack.
+     * Only works if it fits the trio.
+     * The players score is increased if a trio is completed and the playStack gets cleared.
+     * Both players regain their specialAction if a trio is completed.
      *
      * @param card the card to play.
      *
@@ -19,14 +22,22 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun playCard(card: Card) {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) { "Game is null." }
 
         val player = rootService.currentPlayer
-        requireNotNull(player)
+        requireNotNull(player) { "Player is null." }
 
-        require (player.hand.size > 0)
-        game.playStack.add(card)
-        player.hand.remove(card)
+        require(player.hand.size > 0) { "PlayerHand is empty. PlayCard not possible." }
+        if (fitsTrio(card) && game.playStack.size == 2) {
+            game.playStack.clear()
+            game.players[0].hasSpecialAction = true
+            game.players[1].hasSpecialAction = true
+        } else if (fitsTrio(card)) {
+            game.playStack.add(card)
+            player.hand.remove(card)
+        } else {
+            throw IllegalArgumentException("Card doesnt fit stack.")
+        }
 
         //onAllRefreshables { Refreshable.refreshAfterPlayCard() }
     }
@@ -39,20 +50,24 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun drawCard() {
         val game = rootService.currentGame
-        requireNotNull(game) {"Game is null."}
+        requireNotNull(game) { "Game is null." }
 
         val player = rootService.currentPlayer
-        requireNotNull(player) {"Player is null."}
+        requireNotNull(player) { "Player is null." }
 
-        require (game.drawStack.size > 0) {"DrawStack is empty."}
+        require(game.drawStack.size > 0) { "DrawStack is empty." }
         player.hand.add(game.drawStack.first())
         game.drawStack.removeFirst()
 
+        if (game.drawStack.size == 0) {
+            GameService(rootService).endGame()
+        }
         //onAllRefreshables { Refreshable.refreshAfterDrawCard() }
     }
 
     /**
      * Swaps two cards; A from the players hand with a card from the games playStack.
+     * If a player uses swapCard() he looses his specialAction.
      *
      * @param card the card from the players hand.
      * @param replacement the cards from the games playStack.
@@ -63,17 +78,19 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun swapCard(card: Card, replacement: Card) {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) { "Game is null." }
 
         val player = rootService.currentPlayer
-        requireNotNull(player)
+        requireNotNull(player) { "Player is null." }
 
-        require (player.hand.size > 0)
-        require (game.playStack.size < 3)
+        require(player.hand.size > 0) { "Players hand is empty. SwapCard not possible." }
+        require(game.playStack.size < 3) { "PlayStack is >2. SwapCard not possible." }
         game.playStack.add(card)
         game.playStack.remove(replacement)
         player.hand.add(replacement)
         player.hand.remove(card)
+
+        player.hasSpecialAction = false
 
         //onAllRefreshables { Refreshable.refreshAfterSwapCard() }
     }
@@ -88,15 +105,43 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun discardCard(card: Card) {
         val game = rootService.currentGame
-        requireNotNull(game)
+        requireNotNull(game) { "Game is null." }
 
         val player = rootService.currentPlayer
-        requireNotNull(player)
+        requireNotNull(player) { "Player is null." }
 
-        require (player.hand.size > 0)
+        require(player.hand.size > 0) { "PlayerHand is empty. DiscardCard not possible." }
         player.hand.remove(card)
         game.discardStack.add(card)
 
         //onAllRefreshables { Refreshable.refreshAfterDiscardCard() }
+    }
+
+    /**
+     * Private function that checks if a card fits a trio.
+     * If a trio is completed, the player gets awarded points.
+     */
+    private fun fitsTrio(card: Card): Boolean {
+        val game = rootService.currentGame
+        requireNotNull(game) { "Game is null." }
+
+        val player = rootService.currentPlayer
+        requireNotNull(player) { "Player is null." }
+
+        if (game.playStack.isEmpty()) {
+            return true
+        } else if (game.playStack.size == 1) {
+            if (card.value == game.playStack[0].value || card.suit == game.playStack[0].suit) return true;
+        } else if (game.playStack.size == 2) {
+            if (card.value == game.playStack[0].value && card.value == game.playStack[1].value) {
+                player.score += 20
+                return true;
+            }
+            if (card.suit == game.playStack[0].suit && card.suit == game.playStack[1].suit) {
+                player.score += 5
+                return true
+            }
+        }
+        return false
     }
 }
