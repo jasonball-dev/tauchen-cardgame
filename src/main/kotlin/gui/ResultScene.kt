@@ -6,9 +6,12 @@ import tools.aqua.bgw.util.Font
 import tools.aqua.bgw.visual.ColorVisual
 
 /**
+ * [MenuScene] that is displayed when the game is finished. It shows the final result of the game
+ * as well as the scores of both players. Also, there are two buttons: one for starting a new game and one for
+ * quitting the program.
  */
 
-class HelloScene : BoardGameScene(500, 500) {
+class ResultScene : BoardGameScene(500, 500) {
 
     private val helloLabel = Label(
         width = 500,
@@ -23,5 +26,4 @@ class HelloScene : BoardGameScene(500, 500) {
         background = ColorVisual(108, 168, 59)
         addComponents(helloLabel)
     }
-
 }

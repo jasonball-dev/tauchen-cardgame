@@ -32,7 +32,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         rootService.currentGame?.drawStack = CardService(rootService).createDrawStack()
         CardService(rootService).dealCards()
 
-        //onAllRefreshables { Refreshable.refreshAfterStartGame() }
+        onAllRefreshables { refreshAfterStartGame() }
     }
 
     /**
@@ -44,7 +44,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
 
         require(game.drawStack.size == 0) {"DrawStack must empty to end the game."}
 
-        //onAllRefreshables { Refreshable.refreshAfterEndGame() }
+        onAllRefreshables { refreshAfterEndGame() }
         rootService.currentGame = null
         rootService.currentPlayer = null
     }
@@ -71,7 +71,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
             rootService.currentPlayer = rootService.currentGame?.players?.last()
         }
 
-        //onAllRefreshables { Refreshable.refreshAfterStartTurn() }
+        onAllRefreshables { refreshAfterStartTurn() }
     }
 
     /**
@@ -100,7 +100,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
             rootService.currentPlayer = rootService.currentGame?.players?.first()
         }
 
-        //onAllRefreshables { Refreshable.refreshAfterEndTurn() }
+        onAllRefreshables { refreshAfterEndTurn() }
     }
 
     /**

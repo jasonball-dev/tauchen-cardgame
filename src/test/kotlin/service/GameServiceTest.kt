@@ -1,7 +1,5 @@
 package service
 
-import entity.Player
-import entity.TauchenGame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import kotlin.test.BeforeTest

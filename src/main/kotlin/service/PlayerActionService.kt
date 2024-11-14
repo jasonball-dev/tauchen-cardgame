@@ -1,7 +1,6 @@
 package service
 
 import entity.Card
-import view.Refreshable
 
 /**
  * Service layer class that provides the logic for the four possible actions a player
@@ -39,7 +38,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
             throw IllegalArgumentException("Card doesnt fit stack.")
         }
 
-        //onAllRefreshables { Refreshable.refreshAfterPlayCard() }
+        onAllRefreshables { refreshAfterPlayCard() }
     }
 
     /**
@@ -64,9 +63,9 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
                     playCard(player.hand.last())
             }
             GameService(rootService).endGame()
-            //onAllRefreshables { Refreshable.refreshAfterDrawLastCard() }
+            onAllRefreshables { refreshAfterDrawLastCard() }
         } else {
-            //onAllRefreshables { Refreshable.refreshAfterDrawCard() }
+            onAllRefreshables { refreshAfterDrawCard() }
         }
     }
 
@@ -108,7 +107,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
 
         player.hasSpecialAction = false
 
-        //onAllRefreshables { Refreshable.refreshAfterSwapCard() }
+        onAllRefreshables { refreshAfterSwapCard() }
     }
 
     /**
@@ -130,7 +129,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         player.hand.remove(card)
         game.discardStack.add(card)
 
-        //onAllRefreshables { Refreshable.refreshAfterDiscardCard() }
+        onAllRefreshables { refreshAfterDiscardCard() }
     }
 
     /**

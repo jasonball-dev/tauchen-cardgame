@@ -1,6 +1,5 @@
 package service
 
-import entity.Card
 import org.junit.jupiter.api.Test
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals

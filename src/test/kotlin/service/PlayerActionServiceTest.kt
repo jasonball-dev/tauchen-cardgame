@@ -3,13 +3,11 @@ package service
 import entity.Card
 import entity.CardSuit
 import entity.CardValue
-import entity.Player
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
-import kotlin.test.assertTrue
 
 /**
  * TestClass for PlayerActionService.

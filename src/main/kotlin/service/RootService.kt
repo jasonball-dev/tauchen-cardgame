@@ -2,7 +2,7 @@ package service
 
 import entity.Player
 import entity.TauchenGame
-import javax.security.auth.Refreshable
+import gui.Refreshable
 
 /**
  * Main class of the service layer for the Tauchen card game. Provides access
@@ -33,7 +33,7 @@ class RootService {
      * Adds each of the provided [newRefreshables] to all services
      * connected to this root service
      */
-    fun addRefreshable(vararg newRefreshable : Refreshable) {
+    fun addRefreshables(vararg newRefreshable : Refreshable) {
         newRefreshable.forEach {addRefreshable(it)}
     }
 }

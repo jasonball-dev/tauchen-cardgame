@@ -1,6 +1,6 @@
 package service
 
-import javax.security.auth.Refreshable
+import gui.Refreshable
 
 /**
  * Abstract service class that handles multiples [Refreshable]s which are notified
