@@ -40,8 +40,8 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
         posY = 50,
         alignment = Alignment.CENTER,
         font = Font(55, Color(0xFFFFFFF), "JetBrains Mono ExtraBold")
-
     )
+
     private val enterNamesLabel = Label(
         text = "Enter Names",
         width = 1000,
@@ -52,7 +52,34 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
         font = Font(35, Color(0xFFFFFFF), "JetBrains Mono ExtraBold")
     )
 
-    private val returnButton = Button(
+    private val nextPlayerLabel = Label(
+        text = "Next Player: Player Name",
+        width = 1000,
+        height = 100,
+        posX = 0,
+        posY = 150,
+        alignment = Alignment.CENTER,
+        font = Font(45, Color(0xFFFFFFF), "JetBrains Mono ExtraBold")
+    )
+
+    private val startTurnButton = Button(
+        text = "Start Turn",
+        width = 450,
+        height = 100,
+        posX = 275,
+        posY = 300,
+        font = Font(45, Color(0xFFFFFFF), "JetBrains Mono ExtraBold"),
+        visual = ColorVisual(Color(0x49585D))
+    ).apply {
+        onMouseClicked = {
+            val player = rootService.currentPlayer
+            if (player != null) {
+                rootService.gameService.startTurn(player)
+            }
+        }
+    }
+
+    /* private val returnButton = Button(
         text = "<-",
         width = 150,
         height = 100,
@@ -63,14 +90,14 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
     ).apply {
         onMouseClicked = {
             isVisible = false
-            //startGameButton.isVisible = true
+            startGameButton.isVisible = true
             exitButton.isVisible = true
             enterNamesLabel.isVisible = false
             playerOneInput.isVisible = false
             playerTwoInput.isVisible = false
             startButton.isVisible = false
         }
-    }
+    } */
 
     private val startGameButton = Button(
         text = "Start Game",
@@ -88,7 +115,7 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
             playerOneInput.isVisible = true
             playerTwoInput.isVisible = true
             enterNamesLabel.isVisible = true
-            returnButton.isVisible = true
+            // returnButton.isVisible = true
         }
     }
 
@@ -138,7 +165,33 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
         onMouseClicked = {
             val playerNames : List<String> = listOf(playerOneInput.text.trim(), playerTwoInput.text.trim())
             rootService.gameService.startGame(playerNames)
+            headlineLabel.isVisible = false
+            this.isVisible = false
+            playerOneInput.isVisible = false
+            playerTwoInput.isVisible = false
+            enterNamesLabel.isVisible = false
+            // returnButton.isVisible = false
+            nextPlayerLabel.isVisible = true
+            startTurnButton.isVisible = true
         }
+    }
+
+    /**
+     * Initializes the [nextPlayerLabel].
+     */
+    override fun refreshAfterStartGame() {
+        val player = rootService.currentPlayer
+        require(player != null) { "No player found." }
+        nextPlayerLabel.text = "Next Player: " + player.name
+    }
+
+    /**
+     * Updates the [nextPlayerLabel].
+     */
+    override fun refreshAfterEndTurn() {
+        val player = rootService.currentPlayer
+        require(player != null) { "No player found." }
+        nextPlayerLabel.text = "Next Player: " + player.name
     }
 
     init {
@@ -151,12 +204,16 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
             playerOneInput,
             playerTwoInput,
             enterNamesLabel,
-            returnButton)
+            // returnButton,
+            nextPlayerLabel,
+            startTurnButton)
         addComponents(contentPane)
         startButton.isVisible = false
         playerOneInput.isVisible = false
         playerTwoInput.isVisible = false
         enterNamesLabel.isVisible = false
-        returnButton.isVisible = false
+        // returnButton.isVisible = false
+        nextPlayerLabel.isVisible = false
+        startTurnButton.isVisible = false
     }
 }

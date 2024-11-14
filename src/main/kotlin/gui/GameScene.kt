@@ -1,6 +1,7 @@
 package gui
 
 import entity.Card
+import service.CardImageLoader
 import service.RootService
 import tools.aqua.bgw.core.BoardGameScene
 import tools.aqua.bgw.components.uicomponents.Label
@@ -9,17 +10,10 @@ import tools.aqua.bgw.visual.ColorVisual
 import java.awt.Color
 import tools.aqua.bgw.components.container.CardStack
 import tools.aqua.bgw.components.gamecomponentviews.CardView
-import tools.aqua.bgw.util.BidirectionalMap
 import tools.aqua.bgw.util.Font
-import tools.aqua.bgw.animation.DelayAnimation
-import tools.aqua.bgw.components.ComponentView
-import tools.aqua.bgw.components.container.Area
 import tools.aqua.bgw.components.container.LinearLayout
 import tools.aqua.bgw.components.uicomponents.Button
-import tools.aqua.bgw.components.gamecomponentviews.TokenView
-import tools.aqua.bgw.components.layoutviews.Pane
-import tools.aqua.bgw.visual.ImageVisual
-import kotlin.math.min
+import tools.aqua.bgw.util.BidirectionalMap
 
 /**
  * The GameScene class is a BoardGameScene that displays the game board and all game components.
@@ -168,6 +162,44 @@ class GameScene(val rootService: RootService) :
         alignment = Alignment.CENTER,
         visual = ColorVisual(255, 255, 255, 50)
     )
+
+    private val cardMap: BidirectionalMap<Card, CardView> = BidirectionalMap()
+
+    /**
+     * Initializes the complete GUI, i.e. the stack views.
+     */
+    override fun refreshAfterStartGame() {
+        val game = rootService.currentGame
+        checkNotNull(game) { "No started game found." }
+
+        cardMap.clear()
+
+        val cardImageLoader = CardImageLoader()
+
+        //initializeStackView(game.drawStack, drawStack, cardImageLoader)
+
+        playStack.clear()
+        collectionStack.clear()
+        discardStack.clear()
+    }
+
+    /**
+     * Initializes the [playerName] label.
+     */
+    override fun refreshAfterStartTurn() {
+        updatePlayerNameAndScore()
+    }
+
+    /**
+     * Update [playerName] so that the current player attribute is shown.
+     */
+    private fun updatePlayerNameAndScore() {
+        val player = rootService.currentPlayer
+        require(player != null) { "No player found." }
+        playerName.text = "Player: " + player.name
+        playerPoints.text = "Points: " + player.score.toString()
+    }
+
 
     init {
         addComponents(

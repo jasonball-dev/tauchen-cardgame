@@ -19,8 +19,8 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val playerOne = Player(playerNames[0])
         val playerTwo = Player(playerNames[1])
 
-        rootService.currentGame = TauchenGame(players = arrayOf(playerOne, playerTwo))
         val game = rootService.currentGame
+        rootService.currentGame = TauchenGame(players = arrayOf(playerOne, playerTwo))
 
         rootService.currentPlayer = selectStartingPlayer(arrayOf(playerOne, playerTwo))
 

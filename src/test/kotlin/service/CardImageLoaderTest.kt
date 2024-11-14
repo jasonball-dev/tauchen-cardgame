@@ -2,6 +2,7 @@ package service
 
 import entity.CardSuit
 import entity.CardValue
+import service.CardImageLoader
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.test.*
