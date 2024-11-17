@@ -21,7 +21,7 @@ class CardService(private val rootService: RootService) : AbstractRefreshingServ
                 cards.add(Card(suit, value))
             }
         }
-        cards.shuffled()
+        cards.shuffle()
         return cards
     }
 

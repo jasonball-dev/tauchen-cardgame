@@ -1,5 +1,7 @@
 package gui
 
+import entity.*
+
 /**
  * This interface provides a mechanism for the service layer classes to communicate
  * (usually to the GUI classes) that certain changes have been made to the entity
@@ -32,7 +34,7 @@ interface Refreshable {
     fun refreshAfterDrawLastCard() {}
 
     /** Refreshes the GUI after a card has been swapped. */
-    fun refreshAfterSwapCard() {}
+    fun refreshAfterSwapCard(replacement: Card) {}
 
     /** Refreshes the GUI after a card has been discarded. */
     fun refreshAfterDiscardCard() {}

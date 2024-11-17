@@ -109,7 +109,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @param players the two players participating in Tauchen.
      */
     private fun selectStartingPlayer(players : Array<Player>) : Player {
-        val randomIndex = Random.nextInt(1)
+        val randomIndex = Random.nextInt(0,1)
         return players[randomIndex]
     }
 }

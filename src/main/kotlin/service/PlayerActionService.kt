@@ -28,9 +28,13 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
 
         require(player.hand.size > 0) { "PlayerHand is empty. PlayCard not possible." }
         if (fitsTrio(card) && game.playStack.size == 2) {
+            player.collectionStack.add(game.playStack[0])
+            player.collectionStack.add(game.playStack[1])
+            player.collectionStack.add(card)
             game.playStack.clear()
             game.players[0].hasSpecialAction = true
             game.players[1].hasSpecialAction = true
+            player.hand.remove(card)
         } else if (fitsTrio(card)) {
             game.playStack.add(card)
             player.hand.remove(card)
@@ -101,13 +105,13 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         }
 
         game.playStack.add(card)
-        game.playStack.remove(replacement)
         player.hand.add(replacement)
+        game.playStack.remove(replacement)
         player.hand.remove(card)
 
         player.hasSpecialAction = false
 
-        onAllRefreshables { refreshAfterSwapCard() }
+        onAllRefreshables { refreshAfterSwapCard(replacement) }
     }
 
     /**
@@ -136,7 +140,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      * Private function that checks if a card fits a trio.
      * If a trio is completed, the player gets awarded points.
      */
-    private fun fitsTrio(card: Card): Boolean {
+    fun fitsTrio(card: Card): Boolean {
         val game = rootService.currentGame
         requireNotNull(game) { "Game is null." }
 

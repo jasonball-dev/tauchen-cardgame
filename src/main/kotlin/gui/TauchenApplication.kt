@@ -29,6 +29,10 @@ class TauchenApplication : BoardGameApplication("Tauchen Game"), Refreshable {
         hideMenuScene(500)
     }
 
+    override fun refreshAfterEndTurn() {
+        showMenuScene(newGameScene, 500)
+    }
+
     override fun refreshAfterEndGame() {
         // showMenuScene(resultScene)
     }
