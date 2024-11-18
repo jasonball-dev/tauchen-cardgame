@@ -121,13 +121,16 @@ class PlayerActionServiceTest {
         val player = rootService.currentPlayer
         requireNotNull(player) { "Player is null." }
 
-        //Player plays a card, so his hand size is four and there is one card in the games playStack
-        PlayerActionService(rootService).playCard(player.hand[0])
+        game.playStack.add(aceOfSpades)
+        assertEquals(game.playStack.size, 1)
+        assertEquals(player.hand.size, 5)
+
+        player.hand[0] = aceOfSpades
 
         PlayerActionService(rootService).swapCard(player.hand[0], game.playStack[0])
 
-        assertEquals(player.hand.size, 4)
         assertEquals(game.playStack.size, 1)
+        assertEquals(player.hand.size, 5)
 
         assertEquals(player.hasSpecialAction, false)
     }

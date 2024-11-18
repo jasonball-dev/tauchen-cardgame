@@ -12,13 +12,14 @@ class TauchenApplication : BoardGameApplication("Tauchen Game"), Refreshable {
 
     private val gameScene = GameScene(rootService)
     private val newGameScene = NewGameScene(rootService)
+    private val resultScene = ResultScene(rootService)
 
     init {
         rootService.addRefreshables(
             this,
             gameScene,
-            newGameScene
-            //resultScene
+            newGameScene,
+            resultScene
         )
 
         this.showGameScene(gameScene)
@@ -34,7 +35,7 @@ class TauchenApplication : BoardGameApplication("Tauchen Game"), Refreshable {
     }
 
     override fun refreshAfterEndGame() {
-        // showMenuScene(resultScene)
+        showMenuScene(resultScene, 500)
     }
 }
 

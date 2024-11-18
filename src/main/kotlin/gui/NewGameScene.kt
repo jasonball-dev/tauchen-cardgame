@@ -29,7 +29,7 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
         height = 650,
         posX = 1920 / 2 - 1000 / 2,
         posY = 1080 / 2 - 650 / 2,
-        visual = ColorVisual(Color(0x0C2027))
+        visual = ColorVisual(Color(255, 255, 255, 50))
     )
 
     private val headlineLabel = Label(
@@ -195,7 +195,7 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
     }
 
     init {
-        background = ColorVisual(Color(12, 32, 39, 240))
+        background = ColorVisual(Color(0x8c5760))
         contentPane.addAll(
             headlineLabel,
             startGameButton,

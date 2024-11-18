@@ -62,15 +62,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         player.hand.add(game.drawStack.first())
         game.drawStack.removeFirst()
 
-        if (game.drawStack.size == 0) {
-            if (fitsTrio(player.hand.last())) {
-                    playCard(player.hand.last())
-            }
-            GameService(rootService).endGame()
-            onAllRefreshables { refreshAfterDrawLastCard() }
-        } else {
-            onAllRefreshables { refreshAfterDrawCard(player.hand.last()) }
-        }
+        onAllRefreshables { refreshAfterDrawCard() }
     }
 
     /**
@@ -98,18 +90,25 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
             val testPlayStack: MutableList<Card> = mutableListOf()
             testPlayStack.add(game.playStack.first())
             testPlayStack.add(game.playStack.last())
-
+            testPlayStack.remove(replacement)
             if (card.value != testPlayStack[0].value && card.suit != testPlayStack[0].suit) {
                 throw IllegalArgumentException("Card to swap doesnt fit.")
+            } else {
+                game.playStack.add(card)
+                player.hand.add(replacement)
+                game.playStack.remove(replacement)
+                player.hand.remove(card)
+
+                player.hasSpecialAction = false
             }
+        } else {
+            game.playStack.add(card)
+            player.hand.add(replacement)
+            game.playStack.remove(replacement)
+            player.hand.remove(card)
+
+            player.hasSpecialAction = false
         }
-
-        game.playStack.add(card)
-        player.hand.add(replacement)
-        game.playStack.remove(replacement)
-        player.hand.remove(card)
-
-        player.hasSpecialAction = false
 
         onAllRefreshables { refreshAfterSwapCard(replacement) }
     }

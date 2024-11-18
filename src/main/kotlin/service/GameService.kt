@@ -45,8 +45,6 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         require(game.drawStack.size == 0) {"DrawStack must empty to end the game."}
 
         onAllRefreshables { refreshAfterEndGame() }
-        rootService.currentGame = null
-        rootService.currentPlayer = null
     }
 
     /**
@@ -88,10 +86,6 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val playerOne = game.players[0]
         val playerTwo = game.players[1]
 
-        if (player.hand.size > 8) {
-            //discardCard() ???
-        }
-
         if (playerOne == player) {
             rootService.currentGame?.isPlayerOneActive = false
             rootService.currentPlayer = rootService.currentGame?.players?.last()
@@ -109,7 +103,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @param players the two players participating in Tauchen.
      */
     private fun selectStartingPlayer(players : Array<Player>) : Player {
-        val randomIndex = Random.nextInt(0,1)
-        return players[randomIndex]
+        players.shuffle()
+        return players[0]
     }
 }

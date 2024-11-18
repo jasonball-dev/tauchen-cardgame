@@ -102,6 +102,23 @@ class GameScene(val rootService: RootService) :
         }
     }
 
+    val playDrawnCardButton: Button = Button(
+        height = 50,
+        width = 120,
+        posX = 660,
+        posY = 680,
+        text = "Play",
+        font = Font(20, Color(0x000000), "JetBrains Mono ExtraBold"),
+        visual = ColorVisual(255, 255, 255, 50)
+    ).apply {
+        onMouseClicked = {
+            val player = rootService.currentPlayer
+            checkNotNull(player) { "No current player found." }
+
+            rootService.playerActionService.playCard(player.hand.last())
+        }
+    }
+
     val drawButton: Button = Button(
         height = 50,
         width = 120,
@@ -131,7 +148,7 @@ class GameScene(val rootService: RootService) :
 
             playerHand.components.forEach { cardView ->
                 cardView.onMouseClicked = {
-                    if (hasChosenFirst == false && PlayerActionService(rootService).fitsTrio(cardMap.backward(cardView))) {
+                    if (hasChosenFirst == false) {
                         val firstToSwap = cardMap.backward(cardView)
 
                         playStack.components.forEach { cardView ->
@@ -181,7 +198,14 @@ class GameScene(val rootService: RootService) :
         visual = ColorVisual(255, 255, 255, 50)
     ).apply {
         onMouseClicked = {
-            rootService.currentPlayer?.let { it1 -> rootService.gameService.endTurn(it1) }
+            val game = rootService.currentGame
+            checkNotNull(game) { "No started game found." }
+
+            if (game.drawStack.size == 0) {
+                rootService.gameService.endGame()
+            } else {
+                rootService.currentPlayer?.let { it1 -> rootService.gameService.endTurn(it1) }
+            }
         }
     }
 
@@ -266,25 +290,35 @@ class GameScene(val rootService: RootService) :
             )
         }
 
-        //Add cardback to discard stack
+        //TODO: Add cardback to discard stack
 
         collectionStack.clear()
         playStack.clear()
         discardStack.clear()
+
+        //Test resultScene:
+        for (i in 1 .. 37) {
+            game.drawStack.removeFirst()
+        }
     }
 
     /**
      * Initializes the [playerName] label.
      */
     override fun refreshAfterStartTurn() {
+        val game = rootService.currentGame
+        checkNotNull(game) { "No started game found." }
         val player = rootService.currentPlayer
         checkNotNull(player) { "No current player found." }
 
         updatePlayerNameAndScore()
         discardButton.isDisabled = true
         drawButton.isDisabled = false
+        playButton.isDisabled = false
+        playButton.isVisible = true
+        playDrawnCardButton.isVisible = false
         endTurnButton.isDisabled = true
-        if (player.hasSpecialAction == true) {
+        if (player.hasSpecialAction && game.playStack.size > 0) {
             swapButton.isDisabled = false
             } else {
             swapButton.isDisabled = true
@@ -295,6 +329,9 @@ class GameScene(val rootService: RootService) :
      * Ends current players turn and shows NextPlayerScreen.
      */
     override fun refreshAfterEndTurn() {
+        val game = rootService.currentGame
+        checkNotNull(game) { "No started game found." }
+
         updatePlayerNameAndScore()
         updatePlayerHand()
         updateCollectionStack()
@@ -303,21 +340,28 @@ class GameScene(val rootService: RootService) :
     /**
      * Refreshes [playerHand].
      */
-    override fun refreshAfterDrawCard(drawnCard: Card) {
+    override fun refreshAfterDrawCard() {
+        val game = rootService.currentGame
+        checkNotNull(game) { "No started game found." }
         val player = rootService.currentPlayer
         checkNotNull(player) { "No current player found." }
+
+        if (game.drawStack.size == 0) {
+            endTurnButton.text = "End Game"
+        }
 
         updatePlayerHand()
         drawButton.isDisabled = true
         swapButton.isDisabled = true
         endTurnButton.isDisabled = false
+        playButton.isVisible = false
 
-        playStack.onMouseClicked = {
-            rootService.playerActionService.playCard(drawnCard)
-        }
+        playDrawnCardButton.isVisible = true
+
         if (player.hand.size > 8) {
             endTurnButton.isDisabled = true
             discardButton.isDisabled = false
+            playDrawnCardButton.isVisible = true
         }
     }
 
@@ -329,6 +373,7 @@ class GameScene(val rootService: RootService) :
         updateDiscardStack()
         discardButton.isDisabled = true
         endTurnButton.isDisabled = false
+        playButton.isDisabled = true
     }
 
     /**
@@ -340,9 +385,12 @@ class GameScene(val rootService: RootService) :
         updatePlayerNameAndScore()
         updateCollectionStack()
         playButton.isDisabled = true
+        playButton.isVisible = true
+        playDrawnCardButton.isVisible = false
         endTurnButton.isDisabled = false
         swapButton.isDisabled = true
         drawButton.isDisabled = true
+        discardButton.isDisabled = true
     }
 
     /**
@@ -352,6 +400,8 @@ class GameScene(val rootService: RootService) :
         updatePlayerHandAfterSwapCard(replacement)
         updatePlayStack()
         swapButton.isDisabled = true
+        drawButton.isDisabled = true
+        playButton.isDisabled = true
         endTurnButton.isDisabled = false
     }
 
@@ -463,7 +513,8 @@ class GameScene(val rootService: RootService) :
             drawStackLabel,
             collectionStackLabel,
             discardStackLabel,
-            endTurnButton
+            endTurnButton,
+            playDrawnCardButton
         )
     }
 }
