@@ -28,7 +28,7 @@ interface Refreshable {
     fun refreshAfterPlayCard() {}
 
     /** Refreshes the GUI after a card has been drawn. */
-    fun refreshAfterDrawCard() {}
+    fun refreshAfterDrawCard(drawnCard: Card) {}
 
     /** Refreshes the GUI after the last card has been drawn. */
     fun refreshAfterDrawLastCard() {}

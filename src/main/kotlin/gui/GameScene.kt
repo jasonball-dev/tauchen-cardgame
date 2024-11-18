@@ -277,7 +277,18 @@ class GameScene(val rootService: RootService) :
      * Initializes the [playerName] label.
      */
     override fun refreshAfterStartTurn() {
+        val player = rootService.currentPlayer
+        checkNotNull(player) { "No current player found." }
+
         updatePlayerNameAndScore()
+        discardButton.isDisabled = true
+        drawButton.isDisabled = false
+        endTurnButton.isDisabled = true
+        if (player.hasSpecialAction == true) {
+            swapButton.isDisabled = false
+            } else {
+            swapButton.isDisabled = true
+        }
     }
 
     /**
@@ -292,8 +303,22 @@ class GameScene(val rootService: RootService) :
     /**
      * Refreshes [playerHand].
      */
-    override fun refreshAfterDrawCard() {
+    override fun refreshAfterDrawCard(drawnCard: Card) {
+        val player = rootService.currentPlayer
+        checkNotNull(player) { "No current player found." }
+
         updatePlayerHand()
+        drawButton.isDisabled = true
+        swapButton.isDisabled = true
+        endTurnButton.isDisabled = false
+
+        playStack.onMouseClicked = {
+            rootService.playerActionService.playCard(drawnCard)
+        }
+        if (player.hand.size > 8) {
+            endTurnButton.isDisabled = true
+            discardButton.isDisabled = false
+        }
     }
 
     /**
@@ -302,6 +327,8 @@ class GameScene(val rootService: RootService) :
     override fun refreshAfterDiscardCard() {
         updatePlayerHand()
         updateDiscardStack()
+        discardButton.isDisabled = true
+        endTurnButton.isDisabled = false
     }
 
     /**
@@ -312,6 +339,10 @@ class GameScene(val rootService: RootService) :
         updatePlayStack()
         updatePlayerNameAndScore()
         updateCollectionStack()
+        playButton.isDisabled = true
+        endTurnButton.isDisabled = false
+        swapButton.isDisabled = true
+        drawButton.isDisabled = true
     }
 
     /**
@@ -320,6 +351,8 @@ class GameScene(val rootService: RootService) :
     override fun refreshAfterSwapCard(replacement: Card) {
         updatePlayerHandAfterSwapCard(replacement)
         updatePlayStack()
+        swapButton.isDisabled = true
+        endTurnButton.isDisabled = false
     }
 
     /**
