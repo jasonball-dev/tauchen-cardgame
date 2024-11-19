@@ -300,7 +300,6 @@ class GameScene(val rootService: RootService) :
         }
 
         //Add cardback to discard stack
-        val aceOfSpades = Card(CardSuit.SPADES, CardValue.ACE)
         drawStack.clear()
         val cardBack = CardView(
             height = 200,
