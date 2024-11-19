@@ -138,6 +138,9 @@ class ResultScene(val rootService: RootService) : MenuScene(1920, 1080), Refresh
         }
 
         winnerLabel.text = "Winner: " + winner.name + "!"
+        if (playerOne.score == playerTwo.score) {
+            winnerLabel.text = "Both of you!"
+        }
         playerOneScoreLabel.text = winner.name + ": " + winner.score
         playerTwoScoreLabel.text = looser.name + ": " + looser.score
 

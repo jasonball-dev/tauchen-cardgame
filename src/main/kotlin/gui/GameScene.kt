@@ -62,6 +62,15 @@ class GameScene(val rootService: RootService) :
         font = Font(17, Color(0x000000), "JetBrains Mono ExtraBold")
     )
 
+    private val drawStackAmountLabel: Label = Label(
+        height = 50,
+        width = 130,
+        posX = 350,
+        posY = 260,
+        text = "42 Cards",
+        font = Font(17, Color(0x000000), "JetBrains Mono ExtraBold")
+    )
+
     private val collectionStackLabel: Label = Label(
         height = 50,
         width = 130,
@@ -290,16 +299,25 @@ class GameScene(val rootService: RootService) :
             )
         }
 
-        //TODO: Add cardback to discard stack
+        //Add cardback to discard stack
+        val aceOfSpades = Card(CardSuit.SPADES, CardValue.ACE)
+        drawStack.clear()
+        val cardBack = CardView(
+            height = 200,
+            width = 130,
+            front = cardImageLoader.backImage
+        )
+        drawStack.add(cardBack)
+
 
         collectionStack.clear()
         playStack.clear()
         discardStack.clear()
 
-        //Test resultScene:
-        for (i in 1 .. 37) {
+        /* Test resultScene: Less cards in drawStack.
+        for (i in 1 .. 39) {
             game.drawStack.removeFirst()
-        }
+        } */
     }
 
     /**
@@ -351,6 +369,10 @@ class GameScene(val rootService: RootService) :
         }
 
         updatePlayerHand()
+        updateDrawStackAmount()
+        if (game.drawStack.size == 0) {
+            drawStack.clear()
+        }
         drawButton.isDisabled = true
         swapButton.isDisabled = true
         endTurnButton.isDisabled = false
@@ -413,6 +435,15 @@ class GameScene(val rootService: RootService) :
         require(player != null) { "No player found." }
         playerName.text = "Player: " + player.name
         playerPoints.text = "Points: " + player.score.toString()
+    }
+
+    /**
+     * Update [drawStackAmountLabel].
+     */
+    private fun updateDrawStackAmount() {
+        val game = rootService.currentGame
+        require(game != null) { "No game found." }
+        drawStackAmountLabel.text = game.drawStack.size.toString() + " Cards"
     }
 
     /**
@@ -514,7 +545,8 @@ class GameScene(val rootService: RootService) :
             collectionStackLabel,
             discardStackLabel,
             endTurnButton,
-            playDrawnCardButton
+            playDrawnCardButton,
+            drawStackAmountLabel
         )
     }
 }
