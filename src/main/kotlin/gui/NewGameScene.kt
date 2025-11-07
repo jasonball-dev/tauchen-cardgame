@@ -22,7 +22,6 @@ import java.awt.Color
  */
 
 class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refreshable {
-
     // This pane is used to hold all components of the scene and easily center them on the screen
     private val contentPane = Pane<UIComponent>(
         width = 1000,
@@ -39,7 +38,7 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
         posX = 0,
         posY = 50,
         alignment = Alignment.CENTER,
-        font = Font(55, Color(0xFFFFFFF), "JetBrains Mono ExtraBold")
+        font = Font(55, Color(0xFFFFFFF), "Merriweather Black")
     )
 
     private val enterNamesLabel = Label(
@@ -134,7 +133,6 @@ class NewGameScene(val rootService: RootService) : MenuScene(1920, 1080), Refres
     }
 
     private val playerOneInput = TextField(
-        prompt = "Name",
         width = 450,
         height = 100,
         posX = 275,
