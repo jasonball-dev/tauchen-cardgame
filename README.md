@@ -1,16 +1,17 @@
 # Tauchen — Digital Card Game (Kotlin)
 
-**University Project**  
-Developed as part of a software engineering course with a focus on Java/Kotlin-based application design, state management, and turn-based logic.  
-*Tauchen* is a digital two-player card game that combines memory, risk, and strategic decision-making.
+**Solo University Project**  
+Developed independently as part of a software engineering course.  
+*Tauchen* is a digital two-player card game implemented in **Kotlin**, focusing on turn-based game logic, UI design, and object-oriented programming.
 
 ---
 
 ## Overview
 
-In *Tauchen*, two players take turns performing actions to manage and manipulate a shared card pool.  
-The goal is to create **three-of-a-kind sets** from the cards in the center of the table.  
-Each completed set awards points, and the player with the highest score at the end wins.
+*Tauchen* is a simple but strategic card game designed for two players.  
+Each player takes turns performing actions to manipulate a shared card pool.  
+The goal is to form **three-of-a-kind sets** from the cards in the center of the table.  
+Every completed set awards points, and the player with the highest score at the end wins.
 
 ---
 
@@ -18,24 +19,23 @@ Each completed set awards points, and the player with the highest score at the e
 
 Each turn, a player can perform one of several actions:
 
-- **Play** – Play a card from your hand into the center.  
+- **Play** – Place a card from your hand into the shared center area.  
 - **Draw** – Draw a new card from the deck.  
 - **Swap** – Exchange a card between your hand and the center.  
 - **Discard** – Remove a card from play.  
 
-Whenever a **three-of-a-kind** appears in the center, it is automatically removed, and the player earns points.
-
-The game continues until no further valid moves are possible or the deck is empty.
+When three cards of the same type appear in the center, they are automatically removed, and the active player earns points.  
+The game continues until no further moves are possible or the deck is empty.
 
 ---
 
 ## Features
 
-- Turn-based gameplay for two players  
-- Dynamic card pool and scoring system  
-- Randomized deck generation  
-- Simple, intuitive interface  
-- Automatic recognition of three-of-a-kind sets  
+- Fully turn-based gameplay system  
+- Dynamic card and scoring logic  
+- Randomized deck and card pool generation  
+- Automatic detection and scoring of matching sets  
+- Simple, clear user interface implemented in Kotlin  
 
 ---
 
@@ -46,39 +46,30 @@ The game continues until no further valid moves are possible or the deck is empt
 - **IDE:** IntelliJ IDEA  
 - **Version Control:** Git & GitHub  
 
-Focus areas during development included turn-based game logic, state persistence, and modular UI design.
+This project was developed individually, covering all aspects of game logic, user interface, and project structure.
 
 ---
 
 ## How to Play
 
-1. Start the game and enter player names  
-2. The game initializes a shared deck and center pool  
-3. Players alternate turns and select one of the available actions  
-4. When a three-of-a-kind is created, it is removed automatically and points are assigned  
-5. The game ends when no more moves are possible  
+1. Start the game and enter both player names.  
+2. A shared deck and central card pool are initialized.  
+3. Players alternate turns, choosing between Play, Draw, Swap, or Discard.  
+4. When a three-of-a-kind appears in the center, it is automatically removed and points are assigned.  
+5. The game ends when no further actions are possible or the deck is empty.
 
 ---
 
 ## Educational Purpose
 
-This project was designed to demonstrate:
-- Kotlin fundamentals  
-- Object-oriented architecture in a game context  
+This project demonstrates:
+- Kotlin programming and Gradle build configuration  
 - Turn-based state management  
-- Collaboration and version control practices  
-
----
-
-## Credits
-
-Developed as part of a university course on software engineering.  
-Game rules and mechanics are original concepts created for this project.
+- Object-oriented software design  
+- Clean architecture and modular coding practices  
 
 ---
 
 © 2025 Jason Ball.  
 This project was created for educational and portfolio purposes.  
 Commercial use or redistribution of included code and assets is not permitted.
-
----
