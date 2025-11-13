@@ -1,4 +1,4 @@
-# Tauchen — Digital Card Game (Kotlin)
+# Tauchen — Digital Card Game
 
 **Solo University Project**  
 Developed independently as part of a software engineering course.  
@@ -10,7 +10,7 @@ Developed independently as part of a software engineering course.
 
 *Tauchen* is a simple but strategic card game designed for two players.  
 Each player takes turns performing actions to manipulate a shared card pool.  
-The goal is to form **three-of-a-kind sets** from the cards in the center of the table.  
+The goal is to form three-of-a-kind sets from the cards in the center of the table.  
 Every completed set awards points, and the player with the highest score at the end wins.
 
 ---
