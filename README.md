@@ -2,7 +2,7 @@
 
 **Solo University Project**  
 Developed independently as part of a software engineering course.  
-*Tauchen* is a digital two-player card game implemented in **Kotlin**, focusing on turn-based game logic, UI design, and object-oriented programming.
+*Tauchen* is a digital two-player card game implemented in Kotlin, focusing on turn-based game logic, UI design, and object-oriented programming.
 
 ---
 
